@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symptom Checker</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="masthead">
+    <span class="mark">&#9877;</span>
+    <div>
+      <h1>Symptom Checker</h1>
+      <p class="sub">Check what you're feeling. We'll estimate which conditions fit best,
+      scored across {{ disease_count }} conditions and {{ symptom_count }} symptoms.</p>
+    </div>
+  </header>
+
+  <form id="symptom-form">
+    <fieldset>
+      <div class="legend-row">
+        <legend>Select every symptom you currently have</legend>
+        <span id="selected-count" class="selected-count"></span>
+      </div>
+      <input type="search" id="symptom-search" class="search-box"
+             placeholder="Search symptoms…" autocomplete="off">
+      <div class="grid" id="symptom-grid">
+        {% for s in symptoms %}
+        <label class="chip" data-label="{{ s.label|lower }}">
+          <input type="checkbox" name="symptoms" value="{{ s.key }}">
+          <span>{{ s.label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <p id="no-matches" class="no-matches hidden">No symptoms match that search.</p>
+    </fieldset>
+
+    <div class="actions">
+      <button type="submit" id="submit-btn">Estimate likely conditions</button>
+      <button type="button" id="clear-btn" class="ghost">Clear</button>
+    </div>
+  </form>
+
+  <section id="results" class="results hidden" aria-live="polite">
+    <h2>Estimated likelihood</h2>
+    <p class="results-note" id="results-note"></p>
+    <ol id="results-list"></ol>
+  </section>
+
+  <p id="error" class="error hidden"></p>
+
+  <footer>
+    <p>Educational demo only — not a medical device. Scores come from a small hand-built
+    dataset and a simplified independence assumption between symptoms. Always see a
+    clinician for real symptoms.</p>
+  </footer>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
